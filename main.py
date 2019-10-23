@@ -1,5 +1,5 @@
 """
-Traffic Flow Prediction with Neural Networks(SAEs、LSTM、GRU).
+Traffic Flow Prediction with Neural Networks(LSTM、GRU).
 """
 import math
 import warnings
@@ -17,12 +17,6 @@ warnings.filterwarnings("ignore")
 def MAPE(y_true, y_pred):
     """Mean Absolute Percentage Error
     Calculate the mape.
-
-    # Arguments
-        y_true: List/ndarray, ture data.
-        y_pred: List/ndarray, predicted data.
-    # Returns
-        mape: Double, result data for train.
     """
 
     y = [x for x in y_true if x > 0]
@@ -43,10 +37,6 @@ def MAPE(y_true, y_pred):
 def eva_regress(y_true, y_pred):
     """Evaluation
     evaluate the predicted resul.
-
-    # Arguments
-        y_true: List/ndarray, ture data.
-        y_pred: List/ndarray, predicted data.
     """
 
     mape = MAPE(y_true, y_pred)
@@ -96,9 +86,8 @@ def plot_results(y_true, y_preds, names):
 def main():
     lstm = load_model('model/lstm.h5')
     gru = load_model('model/gru.h5')
-    saes = load_model('model/saes.h5')
-    models = [lstm, gru, saes]
-    names = ['LSTM', 'GRU', 'SAEs']
+    models = [lstm, gru]
+    names = ['LSTM', 'GRU']
 
     lag = 12
     file1 = 'data/train.csv'
@@ -108,9 +97,6 @@ def main():
 
     y_preds = []
     for name, model in zip(names, models):
-        if name == 'SAEs':
-            X_test = np.reshape(X_test, (X_test.shape[0], X_test.shape[1]))
-        else:
             X_test = np.reshape(X_test, (X_test.shape[0], X_test.shape[1], 1))
         file = 'images/' + name + '.png'
         plot_model(model, to_file=file, show_shapes=True)
